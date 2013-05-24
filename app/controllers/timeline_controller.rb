@@ -57,6 +57,7 @@ class TimelineController < UIViewController
     cell ||= UITableViewCell.alloc.initWithStyle(
       UITableViewCellStyleSubtitle, reuseIdentifier:@reuse_id
     )
+    cell.selectionStyle = UITableViewCellSelectionStyleNone
 
     cell.textLabel.font = UIFont.boldSystemFontOfSize(15)
     cell.textLabel.text = "@#{@timeline[indexPath.row]['user']['screen_name']}"
