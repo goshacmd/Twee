@@ -14,13 +14,17 @@ class TimelineController < UIViewController
     @table.dataSource = self
     @table.delegate = self
 
+    @refresh = UIRefreshControl.alloc.init
+    @refresh.addTarget(self, action:'refreshTimeline', forControlEvents:UIControlEventValueChanged)
+    @table.addSubview(@refresh)
+
     view.addSubview(@table)
 
     @timeline = []
     load_timeline
   end
 
-  def load_timeline
+  def load_timeline(&block)
     url = NSURL.URLWithString("http://api.twitter.com/1/statuses/home_timeline.json")
     params = { count: '20' }
     req = TWRequest.alloc.initWithURL(url, parameters:params, requestMethod:TWRequestMethodGET)
@@ -30,6 +34,8 @@ class TimelineController < UIViewController
         @timeline = BW::JSON.parse(data)
         @table.reloadData
       end
+
+      block.call if block
     }
   end
 
@@ -62,6 +68,10 @@ class TimelineController < UIViewController
     cell.detailTextLabel.text = @timeline[indexPath.row]['text']
 
     cell
+  end
+
+  def refreshTimeline
+    load_timeline { @refresh.endRefreshing }
   end
 
   def refresh
