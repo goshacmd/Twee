@@ -38,9 +38,9 @@ class TimelineController < UIViewController
   end
 
   def async_load_timeline
-    Dispatch::Queue.concurrent.async do
-      load_timeline { sleep(10) && async_load_timeline }
-    end
+    @timer = NSTimer.scheduledTimerWithTimeInterval(
+      10, target:self, selector:'load_timeline', userInfo:nil, repeats:true
+    )
   end
 
   def load_timeline(&block)
