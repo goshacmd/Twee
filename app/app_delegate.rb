@@ -1,6 +1,6 @@
 class AppDelegate
   def application(application, didFinishLaunchingWithOptions:launchOptions)
-    UINavigationBar.appearance.tintColor = UIColor.colorWithHue(0.625, saturation:0.6, brightness:0.95, alpha:0)
+    UINavigationBar.appearance.tintColor = UIColor.colorWithHue(0.25, saturation:0.7, brightness:0.7, alpha:0)
 
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
 
