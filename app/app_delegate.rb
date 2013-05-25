@@ -2,10 +2,16 @@ class AppDelegate
   def application(application, didFinishLaunchingWithOptions:launchOptions)
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
 
-    @navigationController = UINavigationController.alloc.init
-    @navigationController.pushViewController(TimelineController.controller, animated:false)
+    @timeline = UINavigationController.alloc.init
+    @timeline.pushViewController(TimelineController.controller, animated:false)
 
-    @window.rootViewController = @navigationController
+    @mentions = UINavigationController.alloc.init
+    @mentions.pushViewController(MentionsController.controller, animated:false)
+
+    @tabBarController = UITabBarController.alloc.init
+    @tabBarController.viewControllers = [@timeline, @mentions]
+
+    @window.rootViewController = @tabBarController
     @window.makeKeyAndVisible
 
     showAccountSelectorController unless account

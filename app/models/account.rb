@@ -18,11 +18,15 @@ class Account
   end
 
   def home_timeline(options = {}, &block)
-    request("http://api.twitter.com/1/statuses/home_timeline.json", options, :get, block)
+    request("http://api.twitter.com/1.1/statuses/home_timeline.json", options, :get, block)
+  end
+
+  def mentions_timeline(options = {}, &block)
+    request("http://api.twitter.com/1.1/statuses/mentions_timeline.json", options, :get, block)
   end
 
   def post(text, &block)
-    request("http://api.twitter.com/1/statuses/update.json", { status: text }, :post, block)
+    request("http://api.twitter.com/1.1/statuses/update.json", { status: text }, :post, block)
   end
 
   def request(url, params, method, block)
