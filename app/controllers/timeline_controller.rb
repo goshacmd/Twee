@@ -49,13 +49,17 @@ class TimelineController < UIViewController
     req = TWRequest.alloc.initWithURL(url, parameters:params, requestMethod:TWRequestMethodGET)
     req.account = account
     req.performRequestWithHandler ->(data, url_response, error){
-      unless error
-        @timeline = BW::JSON.parse(data)
-        @table.reloadData
-      end
+      load_data(data) unless error
 
       block.call if block
     }
+  end
+
+  def load_data(data)
+    Dispatch::Queue.main.sync do
+      @timeline = BW::JSON.parse(data)
+      @table.reloadData
+    end
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
