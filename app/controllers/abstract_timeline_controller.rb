@@ -39,7 +39,7 @@ class AbstractTimelineController < UIViewController
 
   def async_load_timeline
     @timer = NSTimer.scheduledTimerWithTimeInterval(
-      10, target:self, selector:'load_timeline', userInfo:nil, repeats:true
+      60, target:self, selector:'load_timeline', userInfo:nil, repeats:true
     )
   end
 
