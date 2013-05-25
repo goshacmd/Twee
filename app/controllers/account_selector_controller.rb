@@ -32,14 +32,8 @@ class AccountSelectorController < UIViewController
 
   def twitter_accounts
     @accounts ||= begin
-      account_store = App.delegate.account_store
-      account_type = account_store.accountTypeWithAccountTypeIdentifier(ACAccountTypeIdentifierTwitter)
-
-      account_store.requestAccessToAccountsWithType(account_type, options:nil, completion:->(granted, error){
-        cant_access_accounts unless granted
-      })
-
-      account_store.accountsWithAccountType(account_type)
+      Twitter.request_access { |granted, error| cant_access_accounts unless granted }
+      Twitter.accounts
     end
   end
 
@@ -52,10 +46,9 @@ class AccountSelectorController < UIViewController
   end
 
   def select_account(account)
-    App::Persistence['account_id'] = account.identifier
+    App::Persistence['account_id'] = account.id
 
     TimelineController.controller.dismissModalViewControllerAnimated(true)
-    TimelineController.controller.refresh
   end
 
   def tableView(tableView, numberOfRowsInSection:section)

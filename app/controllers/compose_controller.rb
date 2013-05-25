@@ -65,6 +65,10 @@ class ComposeController < UIViewController
     view.addSubview(@remainingLabel)
 
     fit_text_view_and_label_into(view.bounds, true)
+  end
+
+  def viewDidAppear(animated)
+    super
 
     @composeField.becomeFirstResponder
   end
@@ -95,15 +99,11 @@ class ComposeController < UIViewController
   end
 
   def post_status(&block)
-    url = NSURL.URLWithString("http://api.twitter.com/1/statuses/update.json")
-    params = { status: @composeField.text }
-    req = TWRequest.alloc.initWithURL(url, parameters:params, requestMethod:TWRequestMethodPOST)
-    req.account = App.delegate.account
-    req.performRequestWithHandler ->(data, url_response, error){
+    App.delegate.account.post(@composeField.text) do |data, error|
       App.alert('An error occured while posting.') if error
 
       block.call if block
-    }
+    end
   end
 
   def textView(textView, shouldChangeTextInRange:range, replacementText:text)

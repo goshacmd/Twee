@@ -22,14 +22,7 @@ class AppDelegate
   end
 
   def account
-    @account ||= begin
-      id = App::Persistence['account_id']
-      account_store.accountWithIdentifier(id) if id
-    end
-  end
-
-  def account_store
-    @account_store ||= ACAccountStore.alloc.init
+    @account ||= Account.find(App::Persistence['account_id'])
   end
 
   def reset_account

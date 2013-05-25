@@ -44,20 +44,16 @@ class TimelineController < UIViewController
   end
 
   def load_timeline(&block)
-    url = NSURL.URLWithString("http://api.twitter.com/1/statuses/home_timeline.json")
-    params = { count: '20' }
-    req = TWRequest.alloc.initWithURL(url, parameters:params, requestMethod:TWRequestMethodGET)
-    req.account = account
-    req.performRequestWithHandler ->(data, url_response, error){
-      load_data(data) unless error
-
+    account.home_timeline(count: '20') do |data, error|
+      App.alert('An error occurrred') if error
+      load_data(data) if data
       block.call if block
-    }
+    end
   end
 
   def load_data(data)
     Dispatch::Queue.main.sync do
-      @timeline = BW::JSON.parse(data)
+      @timeline = data
       @table.reloadData
     end
   end
