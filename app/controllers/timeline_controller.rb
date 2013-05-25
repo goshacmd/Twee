@@ -20,8 +20,21 @@ class TimelineController < UIViewController
 
     view.addSubview(@table)
 
+    refreshButton = UIBarButtonItem.alloc.initWithBarButtonSystemItem(
+      UIBarButtonSystemItemCompose, target:self, action:'compose'
+    )
+    navigationItem.rightBarButtonItem = refreshButton
+
     @timeline = []
     load_timeline
+  end
+
+  def compose
+    composeController = ComposeController.controller
+    composeNavigationController = UINavigationController.alloc.init
+    composeNavigationController.pushViewController(composeController, animated:false)
+
+    presentModalViewController(composeNavigationController, animated:true)
   end
 
   def load_timeline(&block)
