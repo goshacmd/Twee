@@ -26,7 +26,7 @@ class TimelineController < UIViewController
     navigationItem.rightBarButtonItem = refreshButton
 
     @timeline = []
-    load_timeline
+    async_load_timeline
   end
 
   def compose
@@ -35,6 +35,12 @@ class TimelineController < UIViewController
     composeNavigationController.pushViewController(composeController, animated:false)
 
     presentModalViewController(composeNavigationController, animated:true)
+  end
+
+  def async_load_timeline
+    Dispatch::Queue.concurrent.async do
+      load_timeline { sleep(10) && async_load_timeline }
+    end
   end
 
   def load_timeline(&block)
